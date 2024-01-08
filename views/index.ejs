@@ -1,0 +1,79 @@
+<%- include('partials/header.ejs'); -%>
+
+  <div class="box" id="heading">
+    <h1>
+      <%= listTitle %>
+    </h1>
+  </div>
+  <div class="box">
+    <% for(let serie of seriesList){%>
+      <div class="container my-5">
+        <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+          <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+            <h1 id="title<%=serie.id%>" class="display-4 fw-bold lh-1 text-body-emphasis"><%= serie.title %></h1>
+            <p id="season<%=serie.id%>" class="fw-bold lh-1 text-body-emphasis"> Stoped at season <%= serie.last_season %>, episode <%= serie.last_episode %></p>
+            <p id="note<%=serie.id%>" class="lead"><%= serie.note %></p>
+
+            <form class="edit" action="/edit" method="post">
+              <input type="hidden" name="updatedSerieId" value="<%= serie.id %>">
+              <input type="hidden" name="oldSerieName" value="<%= serie.title %>">
+              <div class="mb-3">
+                <input id="input-title<%=serie.id%>" type="text" name="updatedSerieTitle" class="display-4 fw-bold lh-1 text-body-emphasis" value="<%= serie.title %>" autocomplete="off"
+                autofocus="true" placeholder="Name of new serie" hidden="true" />
+              </div>
+              <div class="mb-3">
+              <input id="input-season<%=serie.id%>" type="text" name="updatedSeason" value="<%= serie.last_season %>" autocomplete="off"
+              autofocus="true" placeholder="Current season" hidden="true" />
+            </div>
+            <div class="mb-3">
+              <input id="input-episode<%=serie.id%>" type="text" name="updatedEpisode" value="<%= serie.last_episode %>" autocomplete="off"
+              autofocus="true" placeholder="Last episod I watched" hidden="true" />
+            </div>
+            <div class="mb-3">
+              <input id="input-note<%=serie.id%>" type="text" name="updatedNote" value="<%= serie.note %>" autocomplete="off"
+              autofocus="true" placeholder="Notes" hidden="true" />
+            </div>
+            <div class="mb-3">
+              <button id="save<%=serie.id%>" class="btn btn-outline-secondary btn-lg px-4 edit" type="submit" hidden>Save</button>
+            </div>
+            </form>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center mx-auto mb-4 mb-lg-3">
+              <form action="/delete" method="post">
+                <button type="submit" class="btn btn-outline-secondary btn-lg px-4" name="deleteSerieId" value="<%= serie.id %>" id="delete<%=serie.id%>">Delete</button>
+              </form>
+              <button type="button" class="btn btn-outline-secondary btn-lg px-4" onclick="handler('<%=serie.id%>')" id="edit<%=serie.id%>">Edit</button>
+            </div>
+          </div>
+          <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+              <img class="rounded-lg-3" src="<%= serie.picture%>" alt="show picture" width="500">
+          </div>
+        </div>
+
+      </div>
+      <% } %>
+
+        <form class="item" action="/add" method="post">
+          <input type="text" name="newSerie" placeholder="Name of new serie" autocomplete="off" autofocus="true" />
+          <input type="text" name="season" placeholder="Current season" autocomplete="off" autofocus="true" />
+          <input type="text" name="episod" placeholder="Last episod I watched" autocomplete="off" autofocus="true" />
+          <input type="text" name="notes" placeholder="Notes" autocomplete="off" autofocus="true" />
+          <button class="add" type="submit" name="list" value=<%=listTitle %> >+</button>
+        </form>
+  </div>
+
+  <script>
+    function handler(id) {
+      document.getElementById("title" + id).setAttribute("hidden", true)
+      document.getElementById("season" + id).setAttribute("hidden", true)
+      document.getElementById("note" + id).setAttribute("hidden", true)
+      document.getElementById("first-button" + id).setAttribute("hidden", true)
+      document.getElementById("edit" + id).setAttribute("hidden", true)
+      document.getElementById("input-title" + id).removeAttribute("hidden")
+      document.getElementById("input-season" + id).removeAttribute("hidden")
+      document.getElementById("input-episode" + id).removeAttribute("hidden")
+      document.getElementById("input-note" + id).removeAttribute("hidden")
+      document.getElementById("save" + id).removeAttribute("hidden")
+    }
+  </script>
+  <%- include('partials/footer.ejs'); -%>
